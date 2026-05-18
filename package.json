@@ -13,7 +13,9 @@
     "files": ["main.js", "preload.js", "src/**/*", "renderer/**/*", "assets/**/*"],
     "mac": {
       "category": "public.app-category.productivity",
-      "target": "dmg",
+      "target": [
+        { "target": "dmg", "arch": ["universal"] }
+      ],
       "extendInfo": {
         "LSUIElement": true
       }

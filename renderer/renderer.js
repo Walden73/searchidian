@@ -13,13 +13,66 @@ const $coffeeBtn = document.getElementById('coffeeBtn');
 $coffeeBtn.addEventListener('click', () => {
   window.api.openExternal('https://ko-fi.com/franckwalden');
 });
+const $launchAtStartup = document.getElementById('launchAtStartup');
+$launchAtStartup.addEventListener('change', async () => {
+  const actual = await window.api.setStartup($launchAtStartup.checked);
+  $launchAtStartup.checked = actual;
+});
 const $vaultsPopover = document.getElementById('vaultsPopover');
 const $vaultsList = document.getElementById('vaultsList');
 const $vaultsClose = document.getElementById('vaultsClose');
 const $previewToolbar = document.getElementById('previewToolbar');
+const $previewHeader = document.getElementById('previewHeader');
+const $previewHeaderTitle = document.getElementById('previewHeaderTitle');
+const $highlightToggle = document.getElementById('highlightToggle');
+
+const HIGHLIGHT_KEY = 'searchidian:highlightsHidden';
+if (localStorage.getItem(HIGHLIGHT_KEY) === '1') {
+  document.getElementById('preview').classList.add('no-highlights');
+  $highlightToggle.setAttribute('aria-pressed', 'true');
+  $highlightToggle.title = 'Show highlights';
+}
+$highlightToggle.addEventListener('click', () => {
+  const previewEl = document.getElementById('preview');
+  const willHide = !previewEl.classList.contains('no-highlights');
+  previewEl.classList.toggle('no-highlights', willHide);
+  $highlightToggle.setAttribute('aria-pressed', willHide ? 'true' : 'false');
+  $highlightToggle.title = willHide ? 'Show highlights' : 'Hide highlights';
+  localStorage.setItem(HIGHLIGHT_KEY, willHide ? '1' : '0');
+});
 const $fontSlider = document.getElementById('fontSlider');
 const $fontValue = document.getElementById('fontValue');
 const $previewWrap = document.querySelector('.preview-wrap');
+const $splitter = document.getElementById('splitter');
+const $appRoot = document.querySelector('.app');
+
+const SPLIT_KEY = 'searchidian:previewWidth';
+const savedSplit = Number(localStorage.getItem(SPLIT_KEY));
+if (savedSplit >= 200 && savedSplit <= 800) {
+  $appRoot.style.setProperty('--preview-width', savedSplit + 'px');
+}
+$splitter.addEventListener('mousedown', (e) => {
+  e.preventDefault();
+  $splitter.classList.add('dragging');
+  document.body.classList.add('splitter-active');
+  const rect = $appRoot.getBoundingClientRect();
+  const minW = 200;
+  const maxW = Math.max(minW + 1, rect.width - 240);
+  const onMove = (ev) => {
+    const w = Math.max(minW, Math.min(maxW, ev.clientX - rect.left));
+    $appRoot.style.setProperty('--preview-width', w + 'px');
+  };
+  const onUp = () => {
+    $splitter.classList.remove('dragging');
+    document.body.classList.remove('splitter-active');
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+    const final = parseInt($appRoot.style.getPropertyValue('--preview-width'), 10);
+    if (final) localStorage.setItem(SPLIT_KEY, String(final));
+  };
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+});
 
 const FONT_KEY = 'searchidian:previewScale';
 const savedScale = Number(localStorage.getItem(FONT_KEY)) || 100;
@@ -271,14 +324,12 @@ function highlight(text, query) {
 function renderPreview(title, content) {
   const q = $query.value.trim();
   $preview.innerHTML = '';
-  const h1 = document.createElement('h1');
-  h1.className = 'preview-title';
-  h1.innerHTML = highlight(title, q);
-  $preview.appendChild(h1);
+  $previewHeaderTitle.innerHTML = highlight(title, q);
+  $previewHeaderTitle.title = title;
+  $previewHeader.hidden = false;
   const body = document.createElement('div');
   body.innerHTML = highlight(content, q);
   $preview.appendChild(body);
-  $previewToolbar.hidden = false;
   marks = [...$preview.querySelectorAll('mark')];
   if (marks.length > 0) {
     currentMarkIdx = 0;
@@ -355,6 +406,7 @@ async function openVaultsPopover() {
       $vaultsList.appendChild(li);
     }
   }
+  $launchAtStartup.checked = await window.api.getStartup();
   $vaultsPopover.hidden = false;
   $vaultsToggle.classList.add('active');
 }
@@ -379,5 +431,5 @@ function clearPreview() {
   marks = [];
   currentMarkIdx = -1;
   $matchNav.hidden = true;
-  $previewToolbar.hidden = true;
+  $previewHeader.hidden = true;
 }

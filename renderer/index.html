@@ -8,23 +8,37 @@
 <body>
   <div class="app">
     <aside class="preview-wrap">
-      <div class="preview-toolbar" id="previewToolbar" hidden>
-        <div class="font-control" title="Preview font size">
-          <span class="font-icon small">A</span>
-          <input type="range" id="fontSlider" min="80" max="200" step="5" value="100" />
-          <span class="font-icon large">A</span>
-          <span class="font-value" id="fontValue">100%</span>
+      <header class="preview-header" id="previewHeader" hidden>
+        <div class="preview-header-title" id="previewHeaderTitle"></div>
+        <div class="preview-header-tools" id="previewToolbar">
+          <div class="match-nav" id="matchNav" hidden>
+            <button id="highlightToggle" class="eye-btn" title="Hide highlights" aria-pressed="false">
+              <svg class="eye-open" viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
+                <path fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" d="M1.5 8s2.5-4.5 6.5-4.5S14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8z"/>
+                <circle cx="8" cy="8" r="1.8" fill="currentColor"/>
+              </svg>
+              <svg class="eye-closed" viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
+                <path fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" d="M2 10.5s2.5 3 6 3 6-3 6-3M3 8.5l-1 1.5M13 8.5l1 1.5M6.5 10.3l-.4 1.7M9.5 10.3l.4 1.7"/>
+              </svg>
+            </button>
+            <button id="matchPrev" title="Previous match (Shift+↑)">▲</button>
+            <span id="matchCounter">0 / 0</span>
+            <button id="matchNext" title="Next match (Shift+↓)">▼</button>
+          </div>
+          <div class="font-control" title="Preview font size">
+            <span class="font-icon small">A</span>
+            <input type="range" id="fontSlider" min="80" max="200" step="5" value="100" />
+            <span class="font-icon large">A</span>
+            <span class="font-value" id="fontValue">100%</span>
+          </div>
         </div>
-        <div class="match-nav" id="matchNav" hidden>
-          <button id="matchPrev" title="Previous match (Shift+↑)">▲</button>
-          <span id="matchCounter">0 / 0</span>
-          <button id="matchNext" title="Next match (Shift+↓)">▼</button>
-        </div>
-      </div>
+      </header>
       <div class="preview" id="preview">
         <div class="preview-empty">Hover a result to preview</div>
       </div>
     </aside>
+
+    <div class="splitter" id="splitter" title="Drag to resize"></div>
 
     <main class="main">
       <header class="search-bar">
@@ -42,9 +56,16 @@
 
       <div class="vaults-popover" id="vaultsPopover" hidden>
         <div class="popover-header">
-          <span>Indexed vaults</span>
+          <span>Settings</span>
           <button id="vaultsClose" class="icon-btn" title="Close">×</button>
         </div>
+        <div class="settings-section">
+          <label class="settings-row">
+            <input type="checkbox" id="launchAtStartup" />
+            <span>Launch at startup</span>
+          </label>
+        </div>
+        <div class="settings-section-title">Indexed vaults</div>
         <ul class="vaults-list" id="vaultsList"></ul>
         <div class="popover-footer">Untick a vault to exclude it from search.</div>
       </div>

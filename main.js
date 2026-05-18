@@ -87,10 +87,9 @@ function toggleWindow() {
 }
 
 function createTray() {
-  // Empty icon + title — works without requiring an image asset.
-  const icon = nativeImage.createEmpty();
+  const icon = nativeImage.createFromPath(path.join(__dirname, 'assets/Logo-Obsidian.png'));
+  icon.setTemplateImage(true);
   tray = new Tray(icon);
-  tray.setTitle('🔍');
   tray.setToolTip('Searchidian — Obsidian search');
   tray.on('click', toggleWindow);
   tray.on('right-click', () => {
@@ -174,6 +173,12 @@ ipcMain.on('shell:openExternal', (_evt, url) => {
   if (typeof url === 'string' && /^https?:\/\//i.test(url)) {
     shell.openExternal(url);
   }
+});
+
+ipcMain.handle('startup:get', () => app.getLoginItemSettings().openAtLogin);
+ipcMain.handle('startup:set', (_evt, enabled) => {
+  app.setLoginItemSettings({ openAtLogin: !!enabled });
+  return app.getLoginItemSettings().openAtLogin;
 });
 
 ipcMain.on('window:resize', (_evt, height) => {

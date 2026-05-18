@@ -11,4 +11,6 @@ contextBridge.exposeInMainWorld('api', {
   resize: (height) => ipcRenderer.send('window:resize', height),
   onShown: (cb) => ipcRenderer.on('window:shown', cb),
   openExternal: (url) => ipcRenderer.send('shell:openExternal', url),
+  getStartup: () => ipcRenderer.invoke('startup:get'),
+  setStartup: (enabled) => ipcRenderer.invoke('startup:set', enabled),
 });

@@ -4,7 +4,9 @@ const path = require('path');
 let rgPathPromise = null;
 function getRgPath() {
   if (!rgPathPromise) {
-    rgPathPromise = import('@vscode/ripgrep').then((m) => m.rgPath);
+    rgPathPromise = import('@vscode/ripgrep').then((m) =>
+      m.rgPath.replace(/app\.asar(?!\.unpacked)/, 'app.asar.unpacked')
+    );
   }
   return rgPathPromise;
 }
