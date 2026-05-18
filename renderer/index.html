@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Searchidian</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="preview-wrap">
+      <div class="preview-toolbar" id="previewToolbar" hidden>
+        <div class="font-control" title="Preview font size">
+          <span class="font-icon small">A</span>
+          <input type="range" id="fontSlider" min="80" max="200" step="5" value="100" />
+          <span class="font-icon large">A</span>
+          <span class="font-value" id="fontValue">100%</span>
+        </div>
+        <div class="match-nav" id="matchNav" hidden>
+          <button id="matchPrev" title="Previous match (Shift+↑)">▲</button>
+          <span id="matchCounter">0 / 0</span>
+          <button id="matchNext" title="Next match (Shift+↓)">▼</button>
+        </div>
+      </div>
+      <div class="preview" id="preview">
+        <div class="preview-empty">Hover a result to preview</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="search-bar">
+        <input
+          id="query"
+          type="text"
+          placeholder="Search markdown across all Obsidian vaults…"
+          autofocus
+          spellcheck="false"
+        />
+        <button id="compactToggle" class="icon-btn" title="Compact mode">⇲</button>
+        <button id="coffeeBtn" class="icon-btn" title="Buy me a coffee">☕</button>
+        <button id="vaultsToggle" class="icon-btn" title="Manage vaults">⚙</button>
+      </header>
+
+      <div class="vaults-popover" id="vaultsPopover" hidden>
+        <div class="popover-header">
+          <span>Indexed vaults</span>
+          <button id="vaultsClose" class="icon-btn" title="Close">×</button>
+        </div>
+        <ul class="vaults-list" id="vaultsList"></ul>
+        <div class="popover-footer">Untick a vault to exclude it from search.</div>
+      </div>
+
+      <div class="status" id="status"></div>
+
+      <ul class="results" id="results"></ul>
+    </main>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

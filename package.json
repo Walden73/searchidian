@@ -1,0 +1,29 @@
+{
+  "name": "searchidian",
+  "version": "0.1.0",
+  "description": "Menubar search across all Obsidian vaults on your Mac.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --mac"
+  },
+  "build": {
+    "appId": "com.searchidian.app",
+    "productName": "Searchidian",
+    "files": ["main.js", "preload.js", "src/**/*", "renderer/**/*", "assets/**/*"],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": "dmg",
+      "extendInfo": {
+        "LSUIElement": true
+      }
+    }
+  },
+  "devDependencies": {
+    "electron": "^32.0.0",
+    "electron-builder": "^25.0.0"
+  },
+  "dependencies": {
+    "@vscode/ripgrep": "^1.15.9"
+  }
+}
