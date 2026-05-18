@@ -16,7 +16,8 @@ Menubar search across **all** your Obsidian vaults on macOS.
 ## Install & run
 
 ```bash
-cd "/Volumes/SSD Rapidor/BANK DOCUMENTS/Mes-Codes/Searchidian"
+git clone https://github.com/franckwalden/searchidian.git
+cd searchidian
 npm install
 npm start
 ```
