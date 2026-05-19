@@ -9,15 +9,24 @@ Menubar search across **all** your Obsidian vaults on macOS.
 - Lives in the menubar (Obsidian logo, no Dock entry).
 - Searches every vault registered in Obsidian's config.
 - Ranks results: title matches first, then by number of occurrences in body.
-- Hover a result → live full-file preview on the left.
-- Click a result → opens directly in Obsidian.
-- **Resizable split** — drag the divider between results and preview to your taste; the width is remembered between launches.
-- **Fixed preview header** — note title stays pinned at the top of the preview pane while you scroll.
+- Hover a result → live full-file preview on the left (click to pin it).
+- Click a result → loads preview; right-click for context menu (preview / open).
+- **Preview lock** — pin the preview on a file so hover no longer updates it.
+- **Open file button** — open the previewed file in your default Markdown app directly from the preview pane.
+- **Resizable split** — drag the divider between results and preview; width is remembered.
+- **Fixed preview header** — note title stays pinned at the top while you scroll.
 - **Match stepper** — jump between highlighted matches with ▲ / ▼ (or Shift+↑ / Shift+↓).
-- **Eye toggle** — hide or show match highlights in the preview while keeping navigation working.
+- **Eye toggle** — hide or show match highlights while keeping navigation working.
 - **Font-size slider** (80%–200%) for the preview, persisted across launches.
 - **Compact mode** toggle (titles only) for dense result lists.
-- **Settings panel (⚙)** — enable/disable individual vaults from the search scope, and toggle **Launch at startup**.
+- **Settings panel (⚙)**:
+  - Enable/disable individual vaults from the search scope.
+  - **Markdown apps** — auto-detects installed editors (Obsidian, Typora, iA Writer, VS Code, and 27 more). Pick your default, add custom apps, or remove any entry. Your choice is persisted.
+  - **Launch at startup** toggle.
+  - **FR / EN language toggle** — auto-detected from system language, switchable at any time.
+  - **View logs** — opens the log file so you can diagnose issues yourself.
+  - **Report a bug** — opens a pre-filled GitHub issue (version + OS included).
+  - **Auto-update** — silent download in background; you choose when to install with full release notes shown.
 - Quoted queries (`"foo"`) match whole words; unquoted multi-word queries are AND across words.
 - Global shortcut: **⌘⇧Space** to open.
 - Dark mode aware.
@@ -70,15 +79,15 @@ Output lands in `dist/`.
 | Platform | Status |
 |---|---|
 | macOS — Apple Silicon (M1/M2/M3/M4) | ✅ Tested |
-| macOS — Intel | ⚠️ Built (universal DMG) but **not tested** by the author |
-| Windows | ❌ Not built yet — see Roadmap |
-| Linux | ❌ Not built yet — see Roadmap |
+| macOS — Intel | ⚠️ Universal DMG built — not tested by the author |
+| Windows | ⚠️ Built via CI — not tested by the author |
+| Linux | ⚠️ AppImage built via CI — not tested by the author |
 
-If you're on Intel Mac and run into issues, please [open an issue](https://github.com/Walden73/searchidian/issues) — feedback welcome.
+Platform builds are automated via GitHub Actions on every `v*` tag. If you hit issues on Intel / Windows / Linux, please [open an issue](https://github.com/Walden73/searchidian/issues) — feedback very welcome.
 
 ## How it finds your vaults
 
-Reads `~/Library/Application Support/obsidian/obsidian.json`, which Obsidian maintains automatically. Any vault you've opened at least once will be searched (unless you disable it from the ⚙ panel).
+Reads `~/Library/Application Support/obsidian/obsidian.json`, which Obsidian maintains automatically. Any vault you've opened at least once will be searched (unless you disable it in ⚙ Settings).
 
 ## How search works
 
@@ -88,19 +97,21 @@ Uses **ripgrep** (bundled via `@vscode/ripgrep`) to scan `.md` files across all 
 - Multi-word query: one ripgrep per word in parallel, intersection of files.
 - Quoted query: word-boundary regex (`\b…\b`).
 
-Settings (disabled vaults, split width, font scale, highlights visibility) persist to `~/Library/Application Support/Searchidian/settings.json` and per-window in `localStorage`.
+Settings persist to `~/Library/Application Support/Searchidian/settings.json` and UI state to `localStorage`.
+
+## Logs
+
+Logs are written to `~/Library/Logs/Searchidian/main.log`.  
+You can open them directly from **Settings → View logs**, or paste relevant lines when [reporting a bug](https://github.com/Walden73/searchidian/issues).
 
 ## Roadmap
 
-**Platform expansion** (contributions welcome — the author only has macOS Apple Silicon to test on):
-- Windows build (via GitHub Actions CI)
-- Linux build (AppImage / .deb, via GitHub Actions CI)
-- Mobile companion app (iOS / Android) — long-term
+See [PRD.md](PRD.md) for the full roadmap. Highlights:
 
-**Features (RAG)** — architecture chosen to allow future semantic search:
-- Add an embeddings index (e.g. `transformers.js` for local, or call an API).
-- Persist vectors in `~/Library/Application Support/Searchidian/`.
-- Add a `/ask` mode in the same UI that retrieves top-k notes and queries an LLM.
+- **v0.3** — stabilisation, cross-platform validation, configurable global shortcut
+- **v0.4** — rendered Markdown preview, search history, filters (vault / date / tag), grouped results
+- **v1.0** — feature-complete, full changelog, multilingual README
+- **Long-term** — local semantic search (RAG) with `transformers.js` + `/ask` LLM mode
 
 ## Support the project
 

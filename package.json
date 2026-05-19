@@ -1,24 +1,50 @@
 {
   "name": "searchidian",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Menubar search across all Obsidian vaults on your Mac.",
+  "author": "Franck Walden",
   "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Walden73/searchidian"
+  },
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder --mac"
+    "dist": "electron-builder --mac",
+    "dist:win": "electron-builder --win",
+    "dist:linux": "electron-builder --linux",
+    "dist:all": "electron-builder --mac --win --linux"
   },
   "build": {
     "appId": "com.searchidian.app",
     "productName": "Searchidian",
+    "copyright": "© 2025 Franck Walden",
     "files": ["main.js", "preload.js", "src/**/*", "renderer/**/*", "assets/**/*"],
+    "publish": {
+      "provider": "github",
+      "owner": "Walden73",
+      "repo": "searchidian"
+    },
     "mac": {
       "category": "public.app-category.productivity",
+      "identity": null,
       "target": [
         { "target": "dmg", "arch": ["universal"] }
       ],
       "extendInfo": {
         "LSUIElement": true
       }
+    },
+    "win": {
+      "target": [
+        { "target": "nsis", "arch": ["x64"] }
+      ]
+    },
+    "linux": {
+      "target": [
+        { "target": "AppImage", "arch": ["x64"] }
+      ],
+      "category": "Utility"
     }
   },
   "devDependencies": {
@@ -26,6 +52,8 @@
     "electron-builder": "^25.0.0"
   },
   "dependencies": {
-    "@vscode/ripgrep": "^1.15.9"
+    "@vscode/ripgrep": "^1.15.9",
+    "electron-log": "^5.2.0",
+    "electron-updater": "^6.3.0"
   }
 }

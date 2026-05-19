@@ -9,10 +9,29 @@
   <div class="app">
     <aside class="preview-wrap">
       <header class="preview-header" id="previewHeader" hidden>
-        <div class="preview-header-title" id="previewHeaderTitle"></div>
+        <div class="preview-title-col">
+          <div class="preview-header-title" id="previewHeaderTitle"></div>
+          <div class="preview-title-btns">
+            <button id="previewLock" class="preview-ctrl-btn" title="">
+              <svg class="icon-lock-open" viewBox="0 0 16 16" width="20" height="20" aria-hidden="true">
+                <rect x="3" y="8" width="10" height="6.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.4"/>
+                <path d="M5.5 8V5.5a2.5 2.5 0 0 1 5 0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>
+              <svg class="icon-lock-closed" viewBox="0 0 16 16" width="20" height="20" aria-hidden="true">
+                <rect x="3" y="8" width="10" height="6.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.4"/>
+                <path d="M5.5 8V5.5a2.5 2.5 0 0 1 5 0V8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <button id="previewOpenFile" class="preview-ctrl-btn" title="">
+              <svg viewBox="0 0 16 16" width="20" height="20" aria-hidden="true">
+                <path fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" d="M7 3H3.5A1.5 1.5 0 0 0 2 4.5v8A1.5 1.5 0 0 0 3.5 14h8A1.5 1.5 0 0 0 13 12.5V9M9 2h5v5M14 2l-6 6"/>
+              </svg>
+            </button>
+          </div>
+        </div>
         <div class="preview-header-tools" id="previewToolbar">
           <div class="match-nav" id="matchNav" hidden>
-            <button id="highlightToggle" class="eye-btn" title="Hide highlights" aria-pressed="false">
+            <button id="highlightToggle" class="eye-btn" title="" aria-pressed="false">
               <svg class="eye-open" viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
                 <path fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" d="M1.5 8s2.5-4.5 6.5-4.5S14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8z"/>
                 <circle cx="8" cy="8" r="1.8" fill="currentColor"/>
@@ -21,9 +40,9 @@
                 <path fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" d="M2 10.5s2.5 3 6 3 6-3 6-3M3 8.5l-1 1.5M13 8.5l1 1.5M6.5 10.3l-.4 1.7M9.5 10.3l.4 1.7"/>
               </svg>
             </button>
-            <button id="matchPrev" title="Previous match (Shift+↑)">▲</button>
+            <button id="matchPrev" title="">▲</button>
             <span id="matchCounter">0 / 0</span>
-            <button id="matchNext" title="Next match (Shift+↓)">▼</button>
+            <button id="matchNext" title="">▼</button>
           </div>
           <div class="font-control" title="Preview font size">
             <span class="font-icon small">A</span>
@@ -34,46 +53,82 @@
         </div>
       </header>
       <div class="preview" id="preview">
-        <div class="preview-empty">Hover a result to preview</div>
+        <div class="preview-empty"></div>
       </div>
     </aside>
 
-    <div class="splitter" id="splitter" title="Drag to resize"></div>
+    <div class="splitter" id="splitter" title=""></div>
 
     <main class="main">
       <header class="search-bar">
         <input
           id="query"
           type="text"
-          placeholder="Search markdown across all Obsidian vaults…"
+          placeholder=""
           autofocus
           spellcheck="false"
         />
-        <button id="compactToggle" class="icon-btn" title="Compact mode">⇲</button>
-        <button id="coffeeBtn" class="icon-btn" title="Buy me a coffee">☕</button>
-        <button id="vaultsToggle" class="icon-btn" title="Manage vaults">⚙</button>
+        <button id="compactToggle" class="icon-btn" title="">⇲</button>
+        <button id="coffeeBtn" class="icon-btn" title="☕">☕</button>
+        <button id="vaultsToggle" class="icon-btn" title="">⚙</button>
       </header>
 
       <div class="vaults-popover" id="vaultsPopover" hidden>
         <div class="popover-header">
-          <span>Settings</span>
-          <button id="vaultsClose" class="icon-btn" title="Close">×</button>
+          <span id="settingsTitle"></span>
+          <button id="vaultsClose" class="icon-btn" title="">×</button>
+        </div>
+        <div id="updateBanner" class="update-banner" hidden>
+          <div class="update-banner-title" id="updateBannerTitle"></div>
+          <div class="update-notes" id="updateNotes"></div>
+          <div class="update-actions">
+            <button id="installUpdateBtn" class="update-install-btn"></button>
+            <button id="dismissUpdateBtn" class="update-dismiss-btn"></button>
+          </div>
         </div>
         <div class="settings-section">
           <label class="settings-row">
             <input type="checkbox" id="launchAtStartup" />
-            <span>Launch at startup</span>
+            <span id="launchAtStartupLabel"></span>
           </label>
         </div>
-        <div class="settings-section-title">Indexed vaults</div>
+        <div class="settings-section-title" id="indexedVaultsTitle"></div>
         <ul class="vaults-list" id="vaultsList"></ul>
-        <div class="popover-footer">Untick a vault to exclude it from search.</div>
+        <div class="popover-footer" id="vaultsFooter"></div>
+        <div class="settings-section-title md-apps-title-bar">
+          <span id="mdAppsTitle"></span>
+          <button id="addMdAppBtn" class="add-app-btn"></button>
+        </div>
+        <div id="mdAppsList" class="md-apps-list"></div>
+        <div class="settings-footer">
+          <span class="app-version" id="appVersionLabel"></span>
+          <div class="footer-actions">
+            <button id="viewLogsBtn" class="footer-link-btn"></button>
+            <button id="reportBugBtn" class="footer-link-btn"></button>
+          </div>
+        </div>
+        <div class="settings-section lang-section">
+          <div class="lang-toggle-row">
+            <span class="lang-flag">🇫🇷</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="langToggle" />
+              <span class="toggle-track"></span>
+            </label>
+            <span class="lang-flag">🇬🇧</span>
+          </div>
+        </div>
       </div>
 
       <div class="status" id="status"></div>
 
       <ul class="results" id="results"></ul>
     </main>
+  </div>
+
+  <!-- Custom context menu -->
+  <div id="contextMenu" class="context-menu" hidden>
+    <button id="ctxPreview" class="ctx-item"></button>
+    <button id="ctxOpenFile" class="ctx-item"></button>
   </div>
 
   <script src="renderer.js"></script>
